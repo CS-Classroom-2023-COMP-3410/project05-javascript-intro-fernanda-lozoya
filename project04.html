@@ -1,0 +1,211 @@
+<!-- i think its working as should
+ DYNAMIC QUIZ APP-->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Quiz App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .question-container {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+
+    .options li {
+      margin-bottom: 10px;
+    }
+
+    .options input {
+      margin-right: 10px;
+    }
+
+    .feedback {
+      margin-top: 10px;
+      font-size: 16px;
+      color: green;
+    }
+
+    .summary {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .summary h2 {
+      margin-bottom: 10px;
+    }
+
+    .summary p {
+      margin: 5px 0;
+    }
+
+    .button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dynamic Quiz App</h1>
+  <div class="question-container" id="questionContainer"></div>
+  <button class="button" id="nextButton" onclick="nextQuestion()" style="display: none;">Next</button>
+  <div class="summary" id="summary" style="display: none;"></div>
+
+  <script>
+    const questions = [
+      {
+        question: "What is the capital of France?",
+        options: ["Berlin", "Madrid", "Paris", "Rome"],
+        correctAnswer: 2
+      },
+      {
+        question: "What is 2 + 2?",
+        options: ["3", "4", "5", "6"],
+        correctAnswer: 1
+      },
+      {
+        question: "What is the capital of Japan?",
+        options: ["Beijing", "Seoul", "Tokyo", "Bangkok"],
+        correctAnswer: 2
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    const userAnswers = [];
+
+    function loadQuestion() {
+      const container = document.getElementById("questionContainer");
+      const questionData = questions[currentQuestionIndex];
+      container.innerHTML = `
+        <div class="question">${questionData.question}</div>
+        <ul class="options">
+          ${questionData.options
+            .map(
+              (option, index) => `
+                <li>
+                  <label>
+                    <input type="radio" name="option" value="${index}" />
+                    ${option}
+                  </label>
+                </li>
+              `
+            )
+            .join("")}
+        </ul>
+        <div class="feedback" id="feedback"></div>
+        <button class="button" onclick="submitAnswer()">Submit</button>
+      `;
+    }
+
+    function submitAnswer() {
+      const selectedOption = document.querySelector('input[name="option"]:checked');
+      const feedback = document.getElementById("feedback");
+      if (!selectedOption) {
+        alert("Please select an answer before submitting.");
+        return;
+      }
+
+      const answer = parseInt(selectedOption.value);
+      userAnswers[currentQuestionIndex] = answer;
+      const questionData = questions[currentQuestionIndex];
+
+      if (answer === questionData.correctAnswer) {
+        score++;
+        feedback.textContent = "Correct!";
+        feedback.style.color = "green";
+      } else {
+        feedback.textContent = "Incorrect! The correct answer was: " + questionData.options[questionData.correctAnswer];
+        feedback.style.color = "red";
+      }
+
+      document.getElementById("nextButton").style.display = "block";
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        loadQuestion();
+        document.getElementById("nextButton").style.display = "none";
+      } else {
+        showSummary();
+      }
+    }
+
+    function showSummary() {
+      const container = document.getElementById("questionContainer");
+      const summary = document.getElementById("summary");
+
+      container.style.display = "none";
+      document.getElementById("nextButton").style.display = "none";
+      summary.style.display = "block";
+
+      summary.innerHTML = `
+        <h2>Quiz Summary</h2>
+        <p>Your score: ${score} / ${questions.length}</p>
+        <ul>
+          ${questions
+            .map(
+              (question, index) => `
+                <li>
+                  <strong>${question.question}</strong><br />
+                  Your answer: ${question.options[userAnswers[index]] || "No answer"}<br />
+                  Correct answer: ${question.options[question.correctAnswer]}
+                </li>
+              `
+            )
+            .join("")}
+        </ul>
+      `;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>

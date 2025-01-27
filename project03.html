@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Card Matching Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    .game-info {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+
+    .game-info div {
+      font-size: 18px;
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 100px);
+      grid-gap: 10px;
+    }
+
+    .card {
+      width: 100px;
+      height: 100px;
+      background-color: #007bff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+      cursor: pointer;
+      border-radius: 8px;
+      transform: scale(1);
+      transition: transform 0.2s;
+    }
+
+    .card:active {
+      transform: scale(0.95);
+    }
+
+    .card.flipped, .card.matched {
+      background-color: #28a745;
+      color: white;
+      cursor: default;
+    }
+
+    .restart-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #dc3545;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .restart-button:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-info">
+    <div>Moves: <span id="moves">0</span></div>
+    <div>Time: <span id="timer">0</span> s</div>
+  </div>
+  <div class="game-board" id="gameBoard"></div>
+  <button class="restart-button" onclick="startGame()">Restart</button>
+
+  <script>
+    const cardValues = ["A", "B", "C", "D", "E", "F", "G", "H"];
+    let cards = [];
+    let firstCard = null;
+    let secondCard = null;
+    let moves = 0;
+    let matches = 0;
+    let timer = 0;
+    let timerInterval;
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function startGame() {
+      cards = shuffle([...cardValues, ...cardValues]);
+      const gameBoard = document.getElementById("gameBoard");
+      gameBoard.innerHTML = "";
+      moves = 0;
+      matches = 0;
+      timer = 0;
+      document.getElementById("moves").innerText = moves;
+      document.getElementById("timer").innerText = timer;
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timer++;
+        document.getElementById("timer").innerText = timer;
+      }, 1000);
+
+      cards.forEach(value => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.dataset.value = value;
+        card.addEventListener("click", flipCard);
+        gameBoard.appendChild(card);
+      });
+    }
+
+    function flipCard() {
+      if (this.classList.contains("flipped") || this.classList.contains("matched")) {
+        return;
+      }
+
+      this.classList.add("flipped");
+      this.textContent = this.dataset.value;
+
+      if (!firstCard) {
+        firstCard = this;
+        return;
+      }
+
+      secondCard = this;
+      moves++;
+      document.getElementById("moves").innerText = moves;
+
+      if (firstCard.dataset.value === secondCard.dataset.value) {
+        firstCard.classList.add("matched");
+        secondCard.classList.add("matched");
+        firstCard = null;
+        secondCard = null;
+        matches++;
+
+        if (matches === cardValues.length) {
+          clearInterval(timerInterval);
+          alert(`You won in ${moves} moves and ${timer} seconds!`);
+        }
+      } else {
+        setTimeout(() => {
+          firstCard.classList.remove("flipped");
+          secondCard.classList.remove("flipped");
+          firstCard.textContent = "";
+          secondCard.textContent = "";
+          firstCard = null;
+          secondCard = null;
+        }, 1000);
+      }
+    }
+
+    startGame();
+  </script>
+</body>
+</html>

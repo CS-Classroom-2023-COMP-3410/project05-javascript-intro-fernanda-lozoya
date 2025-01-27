@@ -1,0 +1,188 @@
+<!-- Customizable Digital Clock 
+            WORKING-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customizable Digital Clock</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    #clock {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .controls label, .controls button {
+      font-size: 16px;
+    }
+
+    .customization {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .customization input {
+      margin-left: 10px;
+    }
+
+    .alarm-list {
+      margin-top: 20px;
+      list-style: none;
+      padding: 0;
+    }
+
+    .alarm-list li {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .alarm-list button {
+      margin-left: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="clock">00:00:00</div>
+
+  <div class="controls">
+    <button onclick="toggleFormat()">Toggle 12/24-Hour Format</button>
+  </div>
+
+  <div class="customization">
+    <label>
+      Clock Color:
+      <input type="color" id="colorPicker" onchange="updateColor()">
+    </label>
+    <label>
+      Font Size:
+      <input type="number" id="fontSizePicker" value="48" onchange="updateFontSize()"> px
+    </label>
+    <label>
+      Set Alarm:
+      <input type="time" id="alarmTime">
+      <button onclick="addAlarm()">Add Alarm</button>
+    </label>
+  </div>
+
+  <ul class="alarm-list" id="alarmList"></ul>
+
+  <script>
+    let is24HourFormat = true;
+    let alarms = JSON.parse(localStorage.getItem("alarms")) || [];
+
+    function updateClock() {
+      const clock = document.getElementById("clock");
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      let seconds = now.getSeconds();
+
+      if (!is24HourFormat) {
+        hours = hours % 12 || 12;
+      }
+
+      clock.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      checkAlarms(now);
+    }
+
+    function toggleFormat() {
+      is24HourFormat = !is24HourFormat;
+    }
+
+    function updateColor() {
+      const color = document.getElementById("colorPicker").value;
+      document.getElementById("clock").style.color = color;
+      localStorage.setItem("clockColor", color);
+    }
+
+    function updateFontSize() {
+      const fontSize = document.getElementById("fontSizePicker").value;
+      document.getElementById("clock").style.fontSize = `${fontSize}px`;
+      localStorage.setItem("fontSize", fontSize);
+    }
+
+    function addAlarm() {
+      const alarmTime = document.getElementById("alarmTime").value;
+      if (!alarmTime) return;
+      alarms.push(alarmTime);
+      localStorage.setItem("alarms", JSON.stringify(alarms));
+      renderAlarms();
+    }
+
+    function removeAlarm(index) {
+      alarms.splice(index, 1);
+      localStorage.setItem("alarms", JSON.stringify(alarms));
+      renderAlarms();
+    }
+
+    function renderAlarms() {
+      const alarmList = document.getElementById("alarmList");
+      alarmList.innerHTML = "";
+      alarms.forEach((alarm, index) => {
+        const li = document.createElement("li");
+        li.textContent = alarm;
+        const button = document.createElement("button");
+        button.textContent = "Remove";
+        button.onclick = () => removeAlarm(index);
+        li.appendChild(button);
+        alarmList.appendChild(li);
+      });
+    }
+
+    function checkAlarms(now) {
+      const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      if (alarms.includes(currentTime)) {
+        alert("Alarm ringing!");
+        alarms = alarms.filter(alarm => alarm !== currentTime);
+        localStorage.setItem("alarms", JSON.stringify(alarms));
+        renderAlarms();
+      }
+    }
+
+    function loadPreferences() {
+      const savedColor = localStorage.getItem("clockColor");
+      const savedFontSize = localStorage.getItem("fontSize");
+
+      if (savedColor) {
+        document.getElementById("clock").style.color = savedColor;
+        document.getElementById("colorPicker").value = savedColor;
+      }
+
+      if (savedFontSize) {
+        document.getElementById("clock").style.fontSize = `${savedFontSize}px`;
+        document.getElementById("fontSizePicker").value = savedFontSize;
+      }
+    }
+
+    loadPreferences();
+    renderAlarms();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>

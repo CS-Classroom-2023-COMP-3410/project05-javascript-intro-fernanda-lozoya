@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customizable Keyboard Trainer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f9f9f9;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .text-container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .text {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .input-area {
+      margin-top: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      resize: none;
+    }
+
+    .stats {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .controls button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+    }
+
+    .controls button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Customizable Keyboard Trainer</h1>
+  <div class="text-container">
+    <div class="text" id="textDisplay">Press "Return" to begin typing practice!</div>
+    <div class="input-area">
+      <textarea id="textInput" placeholder="Start typing here..." disabled></textarea>
+    </div>
+    <div class="stats">
+      <p>WPM: <span id="wpm">0</span></p>
+      <p>Accuracy: <span id="accuracy">0</span>%</p>
+    </div>
+  </div>
+  <div class="controls">
+    <button onclick="restartTraining()">Restart</button>
+  </div>
+
+  <script>
+    const textSamples = [
+      "The quick brown fox jumps over the lazy dog.",
+      "Typing fast requires both speed and accuracy.",
+      "JavaScript is a versatile and powerful programming language.",
+      "This is a customizable keyboard training tool.",
+      "Practice makes perfect, especially with typing!",
+      "Can you type without looking at your keyboard?",
+      "Accuracy is as important as speed when typing."
+    ];
+
+    let currentText = "";
+    let totalTyped = 0;
+    let correctTyped = 0;
+    let totalMistakes = 0;
+    let startTime;
+    let intervalId;
+    let totalWordsTyped = 0;
+    let hasStarted = false;
+
+    const textDisplay = document.getElementById("textDisplay");
+    const textInput = document.getElementById("textInput");
+    const wpmDisplay = document.getElementById("wpm");
+    const accuracyDisplay = document.getElementById("accuracy");
+
+    function startTraining() {
+      if (!hasStarted) {
+        resetStats();
+        currentText = getRandomText();
+        textDisplay.textContent = currentText;
+        textInput.value = "";
+        textInput.disabled = false;
+        textInput.focus();
+        startTime = new Date().getTime();
+
+        textInput.addEventListener("input", handleTyping);
+
+        intervalId = setInterval(() => {
+          const elapsedMinutes = (new Date().getTime() - startTime) / 60000;
+          if (elapsedMinutes >= 1) {
+            clearInterval(intervalId);
+            textInput.disabled = true;
+            calculateFinalWPMAndAccuracy();
+          }
+        }, 100);
+
+        hasStarted = true;
+      }
+    }
+
+    function restartTraining() {
+      textInput.disabled = true;
+      clearInterval(intervalId);
+      textInput.removeEventListener("input", handleTyping);
+      hasStarted = false;
+      textDisplay.textContent = "Press \"Return\" to begin typing practice!";
+      textInput.value = "";
+      resetStats();
+    }
+
+    function getRandomText() {
+      return textSamples[Math.floor(Math.random() * textSamples.length)];
+    }
+
+    function handleTyping(event) {
+      const typedText = textInput.value;
+      const typedArray = typedText.split("");
+      const currentArray = currentText.split("");
+
+      correctTyped = 0;
+
+      typedArray.forEach((char, index) => {
+        if (char === currentArray[index]) {
+          correctTyped++;
+        } else if (index < currentArray.length && index === typedArray.length - 1) {
+          totalMistakes++;
+        }
+      });
+
+      totalTyped = typedText.length;
+      updateStats();
+
+      if (typedText === currentText) {
+        totalWordsTyped += currentText.split(" ").length;
+        currentText = getRandomText();
+        textDisplay.textContent = currentText;
+        textInput.value = "";
+      }
+    }
+
+    function updateStats() {
+      const accuracy = ((totalTyped - totalMistakes) / totalTyped) * 100 || 0;
+      accuracyDisplay.textContent = accuracy.toFixed(2);
+    }
+
+    function calculateFinalWPMAndAccuracy() {
+      const elapsedMinutes = (new Date().getTime() - startTime) / 60000;
+      const wpm = totalWordsTyped / elapsedMinutes;
+      const finalAccuracy = ((totalTyped - totalMistakes) / totalTyped) * 100 || 0;
+
+      wpmDisplay.textContent = Math.round(wpm);
+      accuracyDisplay.textContent = finalAccuracy.toFixed(2);
+    }
+
+    function resetStats() {
+      clearInterval(intervalId);
+      wpmDisplay.textContent = 0;
+      accuracyDisplay.textContent = 0;
+      totalTyped = 0;
+      correctTyped = 0;
+      totalMistakes = 0;
+      totalWordsTyped = 0;
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === "Return") {
+        event.preventDefault();
+        if (textInput.value === currentText) {
+          totalWordsTyped += currentText.split(" ").length;
+          currentText = getRandomText();
+          textDisplay.textContent = currentText;
+          textInput.value = "";
+        } else if (!hasStarted) {
+          startTraining();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

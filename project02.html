@@ -1,0 +1,212 @@
+<!-- Title: Interactive To-Do List
+ WORKING-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .todo-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .input-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex-grow: 1;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .add-btn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .add-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .filter-btn {
+      margin-left: 10px;
+      background-color: #28a745;
+      color: white;
+    }
+
+    .filter-btn:hover {
+      background-color: #218838;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f4f4f4;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    .edit-btn {
+      background-color: #ffc107;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background-color: #e0a800;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+
+    .filter-section {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Interactive To-Do List</h1>
+  <div class="todo-container">
+    <div class="input-section">
+      <input type="text" id="taskInput" placeholder="Enter a new task">
+      <button class="add-btn" onclick="addTask()">Add</button>
+    </div>
+    <div class="filter-section">
+      <button class="filter-btn" onclick="filterTasks('all')">All</button>
+      <button class="filter-btn" onclick="filterTasks('completed')">Completed</button>
+      <button class="filter-btn" onclick="filterTasks('pending')">Pending</button>
+    </div>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function addTask() {
+      const taskInput = document.getElementById('taskInput');
+      const taskText = taskInput.value.trim();
+      if (taskText) {
+        tasks.push({ text: taskText, completed: false });
+        taskInput.value = '';
+        saveAndRenderTasks();
+      }
+    }
+
+    function saveAndRenderTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    function renderTasks(filter = 'all') {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+
+      tasks
+        .filter(task => {
+          if (filter === 'completed') return task.completed;
+          if (filter === 'pending') return !task.completed;
+          return true;
+        })
+        .forEach((task, index) => {
+          const li = document.createElement('li');
+          const taskText = document.createElement('span');
+          taskText.textContent = task.text;
+          if (task.completed) taskText.classList.add('completed');
+          taskText.onclick = () => toggleTaskCompletion(index);
+
+          const editButton = document.createElement('button');
+          editButton.textContent = 'Edit';
+          editButton.className = 'edit-btn';
+          editButton.onclick = () => editTask(index);
+
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = 'Delete';
+          deleteButton.className = 'delete-btn';
+          deleteButton.onclick = () => deleteTask(index);
+
+          li.appendChild(taskText);
+          li.appendChild(editButton);
+          li.appendChild(deleteButton);
+          taskList.appendChild(li);
+        });
+    }
+
+    function toggleTaskCompletion(index) {
+      tasks[index].completed = !tasks[index].completed;
+      saveAndRenderTasks();
+    }
+
+    function editTask(index) {
+      const newTaskText = prompt('Edit task:', tasks[index].text);
+      if (newTaskText !== null) {
+        tasks[index].text = newTaskText.trim();
+        saveAndRenderTasks();
+      }
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      saveAndRenderTasks();
+    }
+
+    function filterTasks(filter) {
+      renderTasks(filter);
+    }
+
+    // Initial render
+    renderTasks();
+  </script>
+</body>
+</html>

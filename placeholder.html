@@ -1,0 +1,433 @@
+const elements = [
+      { number: 1, symbol: "H", name: "Hydrogen", group: 1 },
+      { number: 2, symbol: "He", name: "Helium", group: 18 },
+      { number: 3, symbol: "Li", name: "Lithium", group: 1 },
+      { number: 4, symbol: "Be", name: "Beryllium", group: 2 },
+      { number: 5, symbol: "B", name: "Boron", group: 13 },
+      { number: 6, symbol: "C", name: "Carbon", group: 14 },
+      { number: 7, symbol: "N", name: "Nitrogen", group: 15 },
+      { number: 8, symbol: "O", name: "Oxygen", group: 16 },
+      { number: 9, symbol: "F", name: "Fluorine", group: 17 },
+      { number: 10, symbol: "Ne", name: "Neon", group: 18 },
+      { number: 11, symbol: "Na", name: "Sodium", group: 1 },
+      { number: 12, symbol: "Mg", name: "Magnesium", group: 2 },
+      { number: 13, symbol: "Al", name: "Aluminium", group: 13 },
+      { number: 14, symbol: "Si", name: "Silicon", group: 14 },
+      { number: 15, symbol: "P", name: "Phosphorus", group: 15 },
+      { number: 16, symbol: "S", name: "Sulfur", group: 16 },
+      { number: 17, symbol: "Cl", name: "Chlorine", group: 17 },
+      { number: 18, symbol: "Ar", name: "Argon", group: 18 },
+      { number: 19, symbol: "K", name: "Potassium", group: 1 },
+      { number: 20, symbol: "Ca", name: "Calcium", group: 2 },
+      { number: 21, symbol: "Sc", name: "Scandium", group: 3 },
+      { number: 22, symbol: "Ti", name: "Titanium", group: 4 },
+      { number: 23, symbol: "V", name: "Vanadium", group: 5 },
+      { number: 24, symbol: "Cr", name: "Chromium", group: 6 },
+      { number: 25, symbol: "Mn", name: "Manganese", group: 7 },
+      { number: 26, symbol: "Fe", name: "Iron", group: 8 },
+      { number: 27, symbol: "Co", name: "Cobalt", group: 9 },
+      { number: 28, symbol: "Ni", name: "Nickel", group: 10 },
+      { number: 29, symbol: "Cu", name: "Copper", group: 11 },
+      { number: 30, symbol: "Zn", name: "Zinc", group: 12 },
+      { number: 31, symbol: "Ga", name: "Gallium", group: 13 },
+      { number: 32, symbol: "Ge", name: "Germanium", group: 14 },
+      { number: 33, symbol: "As", name: "Arsenic", group: 15 },
+      { number: 34, symbol: "Se", name: "Selenium", group: 16 },
+      { number: 35, symbol: "Br", name: "Bromine", group: 17 },
+      { number: 36, symbol: "Kr", name: "Krypton", group: 18 },
+      { number: 37, symbol: "Rb", name: "Rubidium", group: 1 },
+      { number: 38, symbol: "Sr", name: "Strontium", group: 2 },
+      { number: 39, symbol: "Y", name: "Yttrium", group: 3 },
+      { number: 40, symbol: "Zr", name: "Zirconium", group: 4 },
+      { number: 41, symbol: "Nb", name: "Niobium", group: 5 },
+      { number: 42, symbol: "Mo", name: "Molybdenum", group: 6 },
+      { number: 43, symbol: "Tc", name: "Technetium", group: 7 },
+      { number: 44, symbol: "Ru", name: "Ruthenium", group: 8 },
+      { number: 45, symbol: "Rh", name: "Rhodium", group: 9 },
+      { number: 46, symbol: "Pd", name: "Palladium", group: 10 },
+      { number: 47, symbol: "Ag", name: "Silver", group: 11 },
+      { number: 48, symbol: "Cd", name: "Cadmium", group: 12 },
+      { number: 49, symbol: "In", name: "Indium", group: 13 },
+      { number: 50, symbol: "Sn", name: "Tin", group: 14 },
+      { number: 51, symbol: "Sb", name: "Antimony", group: 15 },
+      { number: 52, symbol: "Te", name: "Tellurium", group: 16 },
+      { number: 53, symbol: "I", name: "Iodine", group: 17 },
+      { number: 54, symbol: "Xe", name: "Xenon", group: 18 },
+      { number: 55, symbol: "Cs", name: "Cesium", group: 1 },
+      { number: 56, symbol: "Ba", name: "Barium", group: 2 },
+      { number: 57, symbol: "La", name: "Lanthanum", group: 3 },
+      { number: 58, symbol: "Ce", name: "Cerium", group: 3 },
+      { number: 59, symbol: "Pr", name: "Praseodymium", group: 3 },
+      { number: 60, symbol: "Nd", name: "Neodymium", group: 3 },
+      { number: 61, symbol: "Pm", name: "Promethium", group: 3 },
+      { number: 62, symbol: "Sm", name: "Samarium", group: 3 },
+      { number: 63, symbol: "Eu", name: "Europium", group: 3 },
+      { number: 64, symbol: "Gd", name: "Gadolinium", group: 3 },
+      { number: 65, symbol: "Tb", name: "Terbium", group: 3 },
+      { number: 66, symbol: "Dy", name: "Dysprosium", group: 3 },
+      { number: 67, symbol: "Ho", name: "Holmium", group: 3 },
+      { number: 68, symbol: "Er", name: "Erbium", group: 3 },
+      { number: 69, symbol: "Tm", name: "Thulium", group: 3 },
+      { number: 70, symbol: "Yb", name: "Ytterbium", group: 3 },
+      { number: 71, symbol: "Lu", name: "Lutetium", group: 3 },
+      { number: 72, symbol: "Hf", name: "Hafnium", group: 4 },
+      { number: 73, symbol: "Ta", name: "Tantalum", group: 5 },
+      { number: 74, symbol: "W", name: "Tungsten", group: 6 },
+      { number: 75, symbol: "Re", name: "Rhenium", group: 7 },
+      { number: 76, symbol: "Os", name: "Osmium", group: 8 },
+      { number: 77, symbol: "Ir", name: "Iridium", group: 9 },
+      { number: 78, symbol: "Pt", name: "Platinum", group: 10 },
+      { number: 79, symbol: "Au", name: "Gold", group: 11 },
+      { number: 80, symbol: "Hg", name: "Mercury", group: 12 },
+      { number: 81, symbol: "Tl", name: "Thallium", group: 13 },
+      { number: 82, symbol: "Pb", name: "Lead", group: 14 },
+      { number: 83, symbol: "Bi", name: "Bismuth", group: 15 },
+      { number: 84, symbol: "Po", name: "Polonium", group: 16 },
+      { number: 85, symbol: "At", name: "Astatine", group: 17 },
+      { number: 86, symbol: "Rn", name: "Radon", group: 18 },
+      { number: 87, symbol: "Fr", name: "Francium", group: 1 },
+      { number: 88, symbol: "Ra", name: "Radium", group: 2 },
+      { number: 89, symbol: "Ac", name: "Actinium", group: 3 },
+      { number: 90, symbol: "Th", name: "Thorium", group: 3 },
+      { number: 91, symbol: "Pa", name: "Protactinium", group: 3 },
+      { number: 92, symbol: "U", name: "Uranium", group: 3 },
+      { number: 93, symbol: "Np", name: "Neptunium", group: 3 },
+      { number: 94, symbol: "Pu", name: "Plutonium", group: 3 },
+      { number: 95, symbol: "Am", name: "Americium", group: 3 },
+      { number: 96, symbol: "Cm", name: "Curium", group: 3 },
+      { number: 97, symbol: "Bk", name: "Berkelium", group: 3 },
+      { number: 98, symbol: "Cf", name: "Californium", group: 3 },
+      { number: 99, symbol: "Es", name: "Einsteinium", group: 3 },
+      { number: 100, symbol: "Fm", name: "Fermium", group: 3 },
+      { number: 101, symbol: "Md", name: "Mendelevium", group: 3 },
+      { number: 102, symbol: "No", name: "Nobelium", group: 3 },
+      { number: 103, symbol: "Lr", name: "Lawrencium", group: 3 },
+      { number: 104, symbol: "Rf", name: "Rutherfordium", group: 4 },
+      { number: 105, symbol: "Db", name: "Dubnium", group: 5 },
+      { number: 106, symbol: "Sg", name: "Seaborgium", group: 6 },
+      { number: 107, symbol: "Bh", name: "Bohrium", group: 7 },
+      { number: 108, symbol: "Hs", name: "Hassium", group: 8 },
+      { number: 109, symbol: "Mt", name: "Meitnerium", group: 9 },
+      { number: 110, symbol: "Ds", name: "Darmstadtium", group: 10 },
+      { number: 111, symbol: "Rg", name: "Roentgenium", group: 11 },
+      { number: 112, symbol: "Cn", name: "Copernicium", group: 12 },
+      { number: 113, symbol: "Nh", name: "Nihonium", group: 13 },
+      { number: 114, symbol: "Fl", name: "Flerovium", group: 14 },
+      { number: 115, symbol: "Mc", name: "Moscovium", group: 15 },
+      { number: 116, symbol: "Lv", name: "Livermorium", group: 16 },
+      { number: 117, symbol: "Ts", name: "Tennessine", group: 17 },
+      { number: 118, symbol: "Og", name: "Oganesson", group: 18 }
+    ];
+
+
+
+
+
+
+
+
+    const elements = [
+            { number: 1, symbol: "H", name: "Hydrogen", group: "1", position: 1 },
+            { number: 2, symbol: "He", name: "Helium", group: "18", position: 18 },
+            { number: 3, symbol: "Li", name: "Lithium", group: "1", position: 3 },
+            { number: 4, symbol: "Be", name: "Beryllium", group: "2", position: 4 },
+            { number: 5, symbol: "B", name: "Boron", group: "13", position: 13 },
+            { number: 6, symbol: "C", name: "Carbon", group: "14", position: 14 },
+            { number: 7, symbol: "N", name: "Nitrogen", group: "15", position: 15 },
+            { number: 8, symbol: "O", name: "Oxygen", group: "16", position: 16 },
+            { number: 9, symbol: "F", name: "Fluorine", group: "17", position: 17 },
+            { number: 10, symbol: "Ne", name: "Neon", group: "18", position: 18 },
+            { number: 11, symbol: "Na", name: "Sodium", group: "1", position: 3 },
+            { number: 12, symbol: "Mg", name: "Magnesium", group: "2", position: 4 },
+            { number: 13, symbol: "Al", name: "Aluminium", group: "13", position: 13 },
+            { number: 14, symbol: "Si", name: "Silicon", group: "14", position: 14 },
+            { number: 15, symbol: "P", name: "Phosphorus", group: "15", position: 15 },
+            { number: 16, symbol: "S", name: "Sulfur", group: "16", position: 16 },
+            { number: 17, symbol: "Cl", name: "Chlorine", group: "17", position: 17 },
+            { number: 18, symbol: "Ar", name: "Argon", group: "18", position: 18 },
+            { number: 19, symbol: "K", name: "Potassium", group: "1", position: 3 },
+            { number: 20, symbol: "Ca", name: "Calcium", group: "2", position: 4 },
+            { number: 21, symbol: "Sc", name: "Scandium", group: "3", position: 21 },
+            { number: 22, symbol: "Ti", name: "Titanium", group: "4", position: 22 },
+            { number: 23, symbol: "V", name: "Vanadium", group: "5", position: 23 },
+            { number: 24, symbol: "Cr", name: "Chromium", group: "6", position: 24 },
+            { number: 25, symbol: "Mn", name: "Manganese", group: "7", position: 25 },
+            { number: 26, symbol: "Fe", name: "Iron", group: "8", position: 26 },
+            { number: 27, symbol: "Co", name: "Cobalt", group: "9", position: 27 },
+            { number: 28, symbol: "Ni", name: "Nickel", group: "10", position: 28 },
+            { number: 29, symbol: "Cu", name: "Copper", group: "11", position: 29 },
+            { number: 30, symbol: "Zn", name: "Zinc", group: "12", position: 30 },
+            { number: 31, symbol: "Ga", name: "Gallium", group: "13", position: 13 },
+            { number: 32, symbol: "Ge", name: "Germanium", group: "14", position: 14 },
+            { number: 33, symbol: "As", name: "Arsenic", group: "15", position: 15 },
+            { number: 34, symbol: "Se", name: "Selenium", group: "16", position: 16 },
+            { number: 35, symbol: "Br", name: "Bromine", group: "17", position: 17 },
+            { number: 36, symbol: "Kr", name: "Krypton", group: "18", position: 18 },
+            { number: 37, symbol: "Rb", name: "Rubidium", group: "1", position: 3 },
+            { number: 38, symbol: "Sr", name: "Strontium", group: "2", position: 4 },
+            { number: 39, symbol: "Y", name: "Yttrium", group: "3", position: 21 },
+            { number: 40, symbol: "Zr", name: "Zirconium", group: "4", position: 22 },
+            { number: 41, symbol: "Nb", name: "Niobium", group: "5", position: 23 },
+            { number: 42, symbol: "Mo", name: "Molybdenum", group: "6", position: 24 },
+            { number: 43, symbol: "Tc", name: "Technetium", group: "7", position: 25 },
+            { number: 44, symbol: "Ru", name: "Ruthenium", group: "8", position: 26 },
+            { number: 45, symbol: "Rh", name: "Rhodium", group: "9", position: 27 },
+            { number: 46, symbol: "Pd", name: "Palladium", group: "10", position: 28 },
+            { number: 47, symbol: "Ag", name: "Silver", group: "11", position: 29 },
+            { number: 48, symbol: "Cd", name: "Cadmium", group: "12", position: 30 },
+            { number: 49, symbol: "In", name: "Indium", group: "13", position: 13 },
+            { number: 50, symbol: "Sn", name: "Tin", group: "14", position: 14 },
+            { number: 51, symbol: "Sb", name: "Antimony", group: "15", position: 15 },
+            { number: 52, symbol: "Te", name: "Tellurium", group: "16", position: 16 },
+            { number: 53, symbol: "I", name: "Iodine", group: "17", position: 17 },
+            { number: 54, symbol: "Xe", name: "Xenon", group: "18", position: 18 },
+            { number: 55, symbol: "Cs", name: "Cesium", group: "1", position: 3 },
+            { number: 56, symbol: "Ba", name: "Barium", group: "2", position: 4 },
+            { number: 57, symbol: "La", name: "Lanthanum", group: "3", position: 21 },
+            { number: 58, symbol: "Ce", name: "Cerium", group: "Lanthanoid", position: 57 },
+            { number: 59, symbol: "Pr", name: "Praseodymium", group: "Lanthanoid", position: 58 },
+            { number: 60, symbol: "Nd", name: "Neodymium", group: "Lanthanoid", position: 59 },
+            { number: 61, symbol: "Pm", name: "Promethium", group: "Lanthanoid", position: 60 },
+            { number: 62, symbol: "Sm", name: "Samarium", group: "Lanthanoid", position: 61 },
+            { number: 63, symbol: "Eu", name: "Europium", group: "Lanthanoid", position: 62 },
+            { number: 64, symbol: "Gd", name: "Gadolinium", group: "Lanthanoid", position: 63 },
+            { number: 65, symbol: "Tb", name: "Terbium", group: "Lanthanoid", position: 64 },
+            { number: 66, symbol: "Dy", name: "Dysprosium", group: "Lanthanoid", position: 65 },
+            { number: 67, symbol: "Ho", name: "Holmium", group: "Lanthanoid", position: 66 },
+            { number: 68, symbol: "Er", name: "Erbium", group: "Lanthanoid", position: 67 },
+            { number: 69, symbol: "Tm", name: "Thulium", group: "Lanthanoid", position: 68 },
+            { number: 70, symbol: "Yb", name: "Ytterbium", group: "Lanthanoid", position: 69 },
+            { number: 71, symbol: "Lu", name: "Lutetium", group: "Lanthanoid", position: 70 },
+            { number: 72, symbol: "Hf", name: "Hafnium", group: "4", position: 22 },
+            { number: 73, symbol: "Ta", name: "Tantalum", group: "5", position: 23 },
+            { number: 74, symbol: "W", name: "Tungsten", group: "6", position: 24 },
+            { number: 75, symbol: "Re", name: "Rhenium", group: "7", position: 25 },
+            { number: 76, symbol: "Os", name: "Osmium", group: "8", position: 26 },
+            { number: 77, symbol: "Ir", name: "Iridium", group: "9", position: 27 },
+            { number: 78, symbol: "Pt", name: "Platinum", group: "10", position: 28 },
+            { number: 79, symbol: "Au", name: "Gold", group: "11", position: 29 },
+            { number: 80, symbol: "Hg", name: "Mercury", group: "12", position: 30 },
+            { number: 81, symbol: "Tl", name: "Thallium", group: "13", position: 13 },
+            { number: 82, symbol: "Pb", name: "Lead", group: "14", position: 14 },
+            { number: 83, symbol: "Bi", name: "Bismuth", group: "15", position: 15 },
+            { number: 84, symbol: "Po", name: "Polonium", group: "16", position: 16 },
+            { number: 85, symbol: "At", name: "Astatine", group: "17", position: 17 },
+            { number: 86, symbol: "Rn", name: "Radon", group: "18", position: 18 },
+            { number: 87, symbol: "Fr", name: "Francium", group: "1", position: 3 },
+            { number: 88, symbol: "Ra", name: "Radium", group: "2", position: 4 },
+            { number: 89, symbol: "Ac", name: "Actinium", group: "3", position: 21 },
+            { number: 90, symbol: "Th", name: "Thorium", group: "Actinoid", position: 57 },
+            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Periodic Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+        }
+        header {
+            text-align: center;
+            margin: 20px 0;
+        }
+        #search-bar {
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(18, 50px);
+            gap: 5px;
+        }
+        .placeholder {
+            grid-column: span 1;
+            background-color: transparent;
+            pointer-events: none;
+        }
+        .element {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            background-color: #d1e7ff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .element.highlight {
+            background-color: #ffe082;
+        }
+        #details {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #ffffff;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Interactive Periodic Table</h1>
+        <input id="search-bar" type="text" placeholder="Search by name, symbol, or atomic number..." oninput="searchElement()">
+    </header>
+
+    <div class="grid" id="periodic-table">
+        <!-- Grid elements and placeholders will be populated by JavaScript -->
+    </div>
+
+    <div id="details">
+        <h2>Element Details</h2>
+        <p id="element-info">Click on an element to see details here.</p>
+    </div>
+
+    <script>
+        const elements = [
+            { number: 1, symbol: "H", name: "Hydrogen", group: "1", position: 1 },
+            { number: 2, symbol: "He", name: "Helium", group: "18", position: 18 },
+            { number: 3, symbol: "Li", name: "Lithium", group: "1", position: 3 },
+            { number: 4, symbol: "Be", name: "Beryllium", group: "2", position: 4 },
+            { number: 5, symbol: "B", name: "Boron", group: "13", position: 13 },
+            { number: 6, symbol: "C", name: "Carbon", group: "14", position: 14 },
+            { number: 7, symbol: "N", name: "Nitrogen", group: "15", position: 15 },
+            { number: 8, symbol: "O", name: "Oxygen", group: "16", position: 16 },
+            { number: 9, symbol: "F", name: "Fluorine", group: "17", position: 17 },
+            { number: 10, symbol: "Ne", name: "Neon", group: "18", position: 18 },
+            { number: 11, symbol: "Na", name: "Sodium", group: "1", position: 3 },
+            { number: 12, symbol: "Mg", name: "Magnesium", group: "2", position: 4 },
+            { number: 13, symbol: "Al", name: "Aluminium", group: "13", position: 13 },
+            { number: 14, symbol: "Si", name: "Silicon", group: "14", position: 14 },
+            { number: 15, symbol: "P", name: "Phosphorus", group: "15", position: 15 },
+            { number: 16, symbol: "S", name: "Sulfur", group: "16", position: 16 },
+            { number: 17, symbol: "Cl", name: "Chlorine", group: "17", position: 17 },
+            { number: 18, symbol: "Ar", name: "Argon", group: "18", position: 18 },
+            { number: 19, symbol: "K", name: "Potassium", group: "1", position: 3 },
+            { number: 20, symbol: "Ca", name: "Calcium", group: "2", position: 4 },
+            { number: 21, symbol: "Sc", name: "Scandium", group: "3", position: 21 },
+            { number: 22, symbol: "Ti", name: "Titanium", group: "4", position: 22 },
+            { number: 23, symbol: "V", name: "Vanadium", group: "5", position: 23 },
+            { number: 24, symbol: "Cr", name: "Chromium", group: "6", position: 24 },
+            { number: 25, symbol: "Mn", name: "Manganese", group: "7", position: 25 },
+            { number: 26, symbol: "Fe", name: "Iron", group: "8", position: 26 },
+            { number: 27, symbol: "Co", name: "Cobalt", group: "9", position: 27 },
+            { number: 28, symbol: "Ni", name: "Nickel", group: "10", position: 28 },
+            { number: 29, symbol: "Cu", name: "Copper", group: "11", position: 29 },
+            { number: 30, symbol: "Zn", name: "Zinc", group: "12", position: 30 },
+            { number: 31, symbol: "Ga", name: "Gallium", group: "13", position: 13 },
+            { number: 32, symbol: "Ge", name: "Germanium", group: "14", position: 14 },
+            { number: 33, symbol: "As", name: "Arsenic", group: "15", position: 15 },
+            { number: 34, symbol: "Se", name: "Selenium", group: "16", position: 16 },
+            { number: 35, symbol: "Br", name: "Bromine", group: "17", position: 17 },
+            { number: 36, symbol: "Kr", name: "Krypton", group: "18", position: 18 },
+            { number: 37, symbol: "Rb", name: "Rubidium", group: "1", position: 3 },
+            { number: 38, symbol: "Sr", name: "Strontium", group: "2", position: 4 },
+            { number: 39, symbol: "Y", name: "Yttrium", group: "3", position: 21 },
+            { number: 40, symbol: "Zr", name: "Zirconium", group: "4", position: 22 },
+            { number: 41, symbol: "Nb", name: "Niobium", group: "5", position: 23 },
+            { number: 42, symbol: "Mo", name: "Molybdenum", group: "6", position: 24 },
+            { number: 43, symbol: "Tc", name: "Technetium", group: "7", position: 25 },
+            { number: 44, symbol: "Ru", name: "Ruthenium", group: "8", position: 26 },
+            { number: 45, symbol: "Rh", name: "Rhodium", group: "9", position: 27 },
+            { number: 46, symbol: "Pd", name: "Palladium", group: "10", position: 28 },
+            { number: 47, symbol: "Ag", name: "Silver", group: "11", position: 29 },
+            { number: 48, symbol: "Cd", name: "Cadmium", group: "12", position: 30 },
+            { number: 49, symbol: "In", name: "Indium", group: "13", position: 13 },
+            { number: 50, symbol: "Sn", name: "Tin", group: "14", position: 14 },
+            { number: 51, symbol: "Sb", name: "Antimony", group: "15", position: 15 },
+            { number: 52, symbol: "Te", name: "Tellurium", group: "16", position: 16 },
+            { number: 53, symbol: "I", name: "Iodine", group: "17", position: 17 },
+            { number: 54, symbol: "Xe", name: "Xenon", group: "18", position: 18 },
+            { number: 55, symbol: "Cs", name: "Cesium", group: "1", position: 3 },
+            { number: 56, symbol: "Ba", name: "Barium", group: "2", position: 4 },
+            { number: 57, symbol: "La", name: "Lanthanum", group: "3", position: 21 },
+            { number: 58, symbol: "Ce", name: "Cerium", group: "Lanthanoid", position: 57 },
+            { number: 59, symbol: "Pr", name: "Praseodymium", group: "Lanthanoid", position: 58 },
+            { number: 60, symbol: "Nd", name: "Neodymium", group: "Lanthanoid", position: 59 },
+            { number: 61, symbol: "Pm", name: "Promethium", group: "Lanthanoid", position: 60 },
+            { number: 62, symbol: "Sm", name: "Samarium", group: "Lanthanoid", position: 61 },
+            { number: 63, symbol: "Eu", name: "Europium", group: "Lanthanoid", position: 62 },
+            { number: 64, symbol: "Gd", name: "Gadolinium", group: "Lanthanoid", position: 63 },
+            { number: 65, symbol: "Tb", name: "Terbium", group: "Lanthanoid", position: 64 },
+            { number: 66, symbol: "Dy", name: "Dysprosium", group: "Lanthanoid", position: 65 },
+            { number: 67, symbol: "Ho", name: "Holmium", group: "Lanthanoid", position: 66 },
+            { number: 68, symbol: "Er", name: "Erbium", group: "Lanthanoid", position: 67 },
+            { number: 69, symbol: "Tm", name: "Thulium", group: "Lanthanoid", position: 68 },
+            { number: 70, symbol: "Yb", name: "Ytterbium", group: "Lanthanoid", position: 69 },
+            { number: 71, symbol: "Lu", name: "Lutetium", group: "Lanthanoid", position: 70 },
+            { number: 72, symbol: "Hf", name: "Hafnium", group: "4", position: 22 },
+            { number: 73, symbol: "Ta", name: "Tantalum", group: "5", position: 23 },
+            { number: 74, symbol: "W", name: "Tungsten", group: "6", position: 24 },
+            { number: 75, symbol: "Re", name: "Rhenium", group: "7", position: 25 },
+            { number: 76, symbol: "Os", name: "Osmium", group: "8", position: 26 },
+            { number: 77, symbol: "Ir", name: "Iridium", group: "9", position: 27 },
+            { number: 78, symbol: "Pt", name: "Platinum", group: "10", position: 28 },
+            { number: 79, symbol: "Au", name: "Gold", group: "11", position: 29 },
+            { number: 80, symbol: "Hg", name: "Mercury", group: "12", position: 30 },
+            { number: 81, symbol: "Tl", name: "Thallium", group: "13", position: 13 },
+            { number: 82, symbol: "Pb", name: "Lead", group: "14", position: 14 },
+            { number: 83, symbol: "Bi", name: "Bismuth", group: "15", position: 15 },
+            { number: 84, symbol: "Po", name: "Polonium", group: "16", position: 16 },
+            { number: 85, symbol: "At", name: "Astatine", group: "17", position: 17 },
+            { number: 86, symbol: "Rn", name: "Radon", group: "18", position: 18 },
+            { number: 87, symbol: "Fr", name: "Francium", group: "1", position: 3 },
+            { number: 88, symbol: "Ra", name: "Radium", group: "2", position: 4 },
+            { number: 89, symbol: "Ac", name: "Actinium", group: "3", position: 21 },
+            { number: 90, symbol: "Th", name: "Thorium", group: "Actinoid", position: 57 },
+            { number: 91, symbol: "Pa", name: "Protactinium", group: "Actinoid", position: 58 },
+            { number: 92, symbol: "U", name: "Uranium", group: "Actinoid", position: 59 },
+            { number: 93, symbol: "Np", name: "Neptunium", group: "Actinoid", position: 60 },
+            { number: 94, symbol: "Pu", name: "Plutonium", group: "Actinoid", position: 61 },
+            { number: 95, symbol: "Am", name: "Americium", group: "Actinoid", position: 62 },
+            { number: 96, symbol: "Cm", name: "Curium", group: "Actinoid", position: 63 },
+            { number: 97, symbol: "Bk", name: "Berkelium", group: "Actinoid", position: 64 },
+            { number: 98, symbol: "Cf", name: "Californium", group: "Actinoid", position: 65 },
+            { number: 99, symbol: "Es", name: "Einsteinium", group: "Actinoid", position: 66 },
+            { number: 100, symbol: "Fm", name: "Fermium", group: "Actinoid", position: 67 },
+            { number: 101, symbol: "Md", name: "Mendelevium", group: "Actinoid", position: 68 },
+            { number: 102, symbol: "No", name: "Nobelium", group: "Actinoid", position: 69 },
+            { number: 103, symbol: "Lr", name: "Lawrencium", group: "Actinoid", position: 70 },
+            { number: 104, symbol: "Rf", name: "Rutherfordium", group: "4", position: 22 },
+            { number: 105, symbol: "Db", name: "Dubnium", group: "5", position: 23 },
+            { number: 106, symbol: "Sg", name: "Seaborgium", group: "6", position: 24 },
+            { number: 107, symbol: "Bh", name: "Bohrium", group: "7", position: 25 },
+            { number: 108, symbol: "Hs", name: "Hassium", group: "8", position: 26 },
+            { number: 109, symbol: "Mt", name: "Meitnerium", group: "9", position: 27 },
+            { number: 110, symbol: "Ds", name: "Darmstadtium", group: "10", position: 28 },
+            { number: 111, symbol: "Rg", name: "Roentgenium", group: "11", position: 29 },
+            { number: 112, symbol: "Cn", name: "Copernicium", group: "12", position: 30 },
+            { number: 113, symbol: "Nh", name: "Nihonium", group: "13", position: 13 },
+            { number: 114, symbol: "Fl", name: "Flerovium", group: "14", position: 14 },
+            { number: 115, symbol: "Mc", name: "Moscovium", group: "15", position: 15 },
+            { number: 116, symbol: "Lv", name: "Livermorium", group: "16", position: 16 },
+            { number: 117, symbol: "Ts", name: "Tennessine", group: "17", position: 17 },
+            { number: 118, symbol: "Og", name: "Oganesson", group: "18", position: 18 }
+        ];
+
+        const groups = [
+            { id: "1", name: "Alkali metals" },
+            { id: "2", name: "Alkaline earth metals" },
+            { id: "3", name: "Lanthanides" },
+            { id: "4", name: "Transition metals" },
+            { id: "5", name: "Post-transition metals" },
+            { id: "6", name: "Metalloids" },
+            { id: "7", name: "Halogens" },
+            { id: "8", name: "Noble gases" },
+            { id: "9", name: "Actinides" },
+            { id: "10", name: "Unknown" },
+            { id: "11", name: "Unknown" },
+            { id: "12", name: "Unknown" },
+            { id: "13", name: "Unknown" },
+            { id: "14", name: "Unknown" },
+            { id: "15", name: "Unknown" },
+            { id: "16", name: "Unknown" },
+            { id: "17", name: "Unknown" },
+            { id: "18", name: "Unknown" },
+        ];

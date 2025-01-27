@@ -1,0 +1,163 @@
+<!--WORKING
+            CANVAS-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customizable Drawing Canvas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    canvas {
+      border: 1px solid #000;
+      cursor: crosshair;
+    }
+
+    .controls {
+      margin: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .controls label {
+      font-size: 14px;
+    }
+
+    .controls input[type="color"], .controls input[type="number"] {
+      margin-left: 5px;
+    }
+
+    .buttons {
+      margin-top: 10px;
+    }
+
+    .buttons button {
+      padding: 10px 15px;
+      font-size: 14px;
+      margin-right: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .buttons button:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Customizable Drawing Canvas</h1>
+  <div class="controls">
+    <label>
+      Brush Color: <input type="color" id="brushColor" value="#000000">
+    </label>
+    <label>
+      Brush Size: <input type="number" id="brushSize" value="5" min="1" max="50">
+    </label>
+    <label>
+      Background Color: <input type="color" id="bgColor" value="#ffffff">
+    </label>
+  </div>
+  <canvas id="drawingCanvas" width="800" height="500"></canvas>
+  <div class="buttons">
+    <button onclick="undoLastStroke()">Undo</button>
+    <button onclick="clearCanvas()">Clear</button>
+    <button onclick="saveCanvas()">Save</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('drawingCanvas');
+    const ctx = canvas.getContext('2d');
+    const brushColorInput = document.getElementById('brushColor');
+    const brushSizeInput = document.getElementById('brushSize');
+    const bgColorInput = document.getElementById('bgColor');
+
+    let drawing = false;
+    let strokes = [];
+    let currentStroke = [];
+
+    function setCanvasBackground(color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    bgColorInput.addEventListener('change', () => {
+      setCanvasBackground(bgColorInput.value);
+      redrawAllStrokes();
+    });
+
+    canvas.addEventListener('mousedown', () => {
+      drawing = true;
+      currentStroke = [];
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      if (currentStroke.length > 0) {
+        strokes.push(currentStroke);
+      }
+      drawing = false;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!drawing) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const brushColor = brushColorInput.value;
+      const brushSize = parseInt(brushSizeInput.value);
+
+      currentStroke.push({ x, y, brushColor, brushSize });
+
+      ctx.fillStyle = brushColor;
+      ctx.beginPath();
+      ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    function undoLastStroke() {
+      strokes.pop();
+      redrawAllStrokes();
+    }
+
+    function clearCanvas() {
+      strokes = [];
+      setCanvasBackground(bgColorInput.value);
+    }
+
+    function redrawAllStrokes() {
+      setCanvasBackground(bgColorInput.value);
+      for (const stroke of strokes) {
+        for (const point of stroke) {
+          ctx.fillStyle = point.brushColor;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, point.brushSize / 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    function saveCanvas() {
+      const link = document.createElement('a');
+      link.download = 'drawing.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    setCanvasBackground(bgColorInput.value);
+  </script>
+</body>
+</html>

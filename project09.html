@@ -1,0 +1,172 @@
+<!--WORKINGGGGGGGG-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorting Visualization Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .array-container {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 5px;
+      margin-bottom: 20px;
+    }
+
+    .bar {
+      background-color: #007bff;
+      width: 20px;
+      text-align: center;
+      color: white;
+      font-size: 12px;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .controls button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #28a745;
+      color: white;
+    }
+
+    .controls button:hover {
+      background-color: #218838;
+    }
+
+    .dropdown {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .speed-slider {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sorting Visualization Tool</h1>
+  <div class="array-container" id="arrayContainer"></div>
+  <div class="controls">
+    <select id="algorithmSelector" class="dropdown">
+      <option value="bubble">Bubble Sort</option>
+      <option value="insertion">Insertion Sort</option>
+    </select>
+    <input type="range" id="speedSlider" class="speed-slider" min="100" max="2000" value="500">
+    <button onclick="startSorting()">Start Sorting</button>
+    <button onclick="resetArray()">Reset Array</button>
+  </div>
+
+  <script>
+    let array = [];
+    const arrayContainer = document.getElementById('arrayContainer');
+    const algorithmSelector = document.getElementById('algorithmSelector');
+    const speedSlider = document.getElementById('speedSlider');
+
+    function generateArray() {
+      array = Array.from({ length: 20 }, () => Math.floor(Math.random() * 100) + 1);
+      renderArray();
+    }
+
+    function renderArray() {
+      arrayContainer.innerHTML = '';
+      array.forEach(value => {
+        const bar = document.createElement('div');
+        bar.classList.add('bar');
+        bar.style.height = `${value * 3}px`;
+        bar.textContent = value;
+        arrayContainer.appendChild(bar);
+      });
+    }
+
+    async function startSorting() {
+      const algorithm = algorithmSelector.value;
+      const speed = parseInt(speedSlider.value);
+
+      if (algorithm === 'bubble') {
+        await bubbleSort(speed);
+      } else if (algorithm === 'insertion') {
+        await insertionSort(speed);
+      }
+    }
+
+    async function bubbleSort(speed) {
+      for (let i = 0; i < array.length - 1; i++) {
+        for (let j = 0; j < array.length - i - 1; j++) {
+          renderComparison(j, j + 1);
+          if (array[j] > array[j + 1]) {
+            [array[j], array[j + 1]] = [array[j + 1], array[j]];
+            renderArray();
+          }
+          await delay(speed);
+        }
+      }
+    }
+
+    async function insertionSort(speed) {
+      for (let i = 1; i < array.length; i++) {
+        let key = array[i];
+        let j = i - 1;
+        while (j >= 0 && array[j] > key) {
+          renderComparison(j, j + 1);
+          array[j + 1] = array[j];
+          j--;
+          renderArray();
+          await delay(speed);
+        }
+        array[j + 1] = key;
+        renderArray();
+      }
+    }
+
+    function renderComparison(index1, index2) {
+      const bars = document.querySelectorAll('.bar');
+      bars[index1].style.backgroundColor = 'red';
+      bars[index2].style.backgroundColor = 'red';
+      setTimeout(() => {
+        bars[index1].style.backgroundColor = '#007bff';
+        bars[index2].style.backgroundColor = '#007bff';
+      }, speedSlider.value);
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function resetArray() {
+      generateArray();
+    }
+
+    generateArray();
+  </script>
+</body>
+</html>
